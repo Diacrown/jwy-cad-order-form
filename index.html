@@ -101,18 +101,20 @@
               <tr>
                 <td class="font-black-strong bg-blue-hl">Metal 1</td>
                 <td class="bg-blue-hl flex">
-                   <select name="Metal Type 1" id="dd-metalType1" class="w-1/2"></select>
+                   <select name="Metal Type 1" id="dd-metalType1" class="w-[38%]"></select>
                    <span class="px-1 font-bold">/</span>
-                   <select name="Metal Col 1" id="dd-metalColor1" class="w-1/2"></select>
+                   <select name="Metal Col 1" id="dd-metalColor1" class="w-[38%]"></select>
+                   <select name="Metal Extra 1" id="dd-metalExtra1" class="w-[24%]" title="Nickel Free / Palladium"></select>
                 </td>
               </tr>
               <tr><td class="bg-blue-hl font-black-strong">Wt (gms)</td><td class="bg-blue-hl"><input type="number" step="0.01" name="Metal 1 Weight" placeholder="0.00" class="font-mono" onblur="formatDecimal(this,2)"></td></tr>
               <tr>
                 <td class="font-black-strong bg-blue-hl">Metal 2</td>
                 <td class="bg-blue-hl flex">
-                   <select name="Metal Type 2" id="dd-metalType2" class="w-1/2"></select>
+                   <select name="Metal Type 2" id="dd-metalType2" class="w-[38%]"></select>
                    <span class="px-1 font-bold">/</span>
-                   <select name="Metal Col 2" id="dd-metalColor2" class="w-1/2"></select>
+                   <select name="Metal Col 2" id="dd-metalColor2" class="w-[38%]"></select>
+                   <select name="Metal Extra 2" id="dd-metalExtra2" class="w-[24%]" title="Nickel Free / Palladium"></select>
                 </td>
               </tr>
               <tr><td class="bg-blue-hl font-black-strong">Wt (gms)</td><td class="bg-blue-hl"><input type="number" step="0.01" name="Metal 2 Weight" placeholder="0.00" class="font-mono" onblur="formatDecimal(this,2)"></td></tr>
@@ -166,8 +168,6 @@
                   <th class="w-28">Stone</th>
                   <th class="w-28">Shape</th>
                   <th class="w-44 whitespace-nowrap">MM Size<br><span class="text-[9px] font-normal">(L x W x H)</span></th>
-                  <th class="w-14">Color</th>
-                  <th class="w-16">Clarity</th>
                   <th class="w-20">Avg Dia Wt<br><span class="text-[9px] font-normal">(ct/pc)</span></th>
                   <th class="w-16">Dia.Qty</th>
                   <th class="w-20">Total Wt<br><span class="text-[9px] font-normal">(auto)</span></th>
@@ -242,13 +242,15 @@
         subCategories: ["Bridal", "Fashion", "Eternity", "Solitaire"],
         stamping: ["9K", "10K", "14K", "18K", "22K", "PT", "375", "417", "585", "750", "916", "950", "BRCZ", "AGCZ", "SS925", "AY", "AYCZ", "PT950", "9ct", "18ct", "14ct"],
         stoneTypes: ["Mined", "LGD", "Mined+LGD", "Mined Semi", "LGD Semi", "Mount", "Color", "Color Semi", "Color+Mined", "Color+Mined Semi", "Color+LGD", "Color+LGD Semi", "Zircon", "Zircon Semi", "Mined+LGD Semi", "Color+LGD+CZ", "CZ", "Plain", "Mined+Lab+Colour"],
-        mainColors: ["D", "E", "F", "G", "H", "I", "J", "K", "L"],
-        mainClarities: ["IF", "FL", "VVS1", "VVS2", "VS1", "VS2", "SI1", "SI2", "SI3", "PK1/I1", "PK2/I2", "PK3/I3"],
+        // mainColors/mainClarities removed along with the Color/Clarity columns.
         alloyTypes: ["Standard", "Palladium", "Nickel Free", "Platinum", "SS925", "Gold Plated", "Nickel Safe"],
         shapes: ["Round", "Baguette", "Carre", "Emerald", "Heart", "Marquise", "Oval", "Pear", "Princess", "Radiant", "Single Cut", "Sq. Cushion", "Sq. Emerald", "Tappered Bagguette", "Triangle", "Trilliant"],
         settings: ["Hand", "Wax", "Machine", "Prong", "Pave", "Bezel", "Channel"],
         diamondSources: ["Diacrown", "Customer"],
-        metalTypes: ["09KT", "14KT", "18KT", "22KT", "PT", "SILVER", "BRASS", "18KT + PT", "Alloy", "10KT", "09KT+SILVER", "14KT + PT", "18KT SILVER", "09KT + PT", "925", "925+SS", "925+18YG"],
+        // Updated from the master alloy costing table (bifurcated 'Metal' values).
+        metalTypes: ["Wax", "Brass", "AG925", "AG935", "PT600", "PT900", "PT950", "9KT", "10KT", "14KT", "18KT", "22KT", "24KT"],
+        // New field from the same table's bifurcated 'Extra' column (Nickel Free / Palladium variants).
+        alloyExtra: ["NF", "PD"],
         metalColors: ["WG", "YG", "RG", "WY", "YW", "WR", "RW", "YR", "RY", "YP", "RP", "950", "YWR", "YA", "WA", "RA"],
         rhodium: ["Yes", "No", "N/A"]
     };
@@ -274,8 +276,10 @@
         populateDropdown('dd-rhodium', dropdownData.rhodium);
         populateDropdown('dd-metalType1', dropdownData.metalTypes, "Type");
         populateDropdown('dd-metalColor1', dropdownData.metalColors, "Col");
+        populateDropdown('dd-metalExtra1', dropdownData.alloyExtra, "-");
         populateDropdown('dd-metalType2', dropdownData.metalTypes, "Type");
         populateDropdown('dd-metalColor2', dropdownData.metalColors, "Col");
+        populateDropdown('dd-metalExtra2', dropdownData.alloyExtra, "-");
     }
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -432,8 +436,6 @@
                <input type="number" step="0.01" class="d-hei dim-input" placeholder="H" onblur="formatDecimal(this,2)">
              </div>
           </td>
-          <td><input type="text" class="d-color w-full text-center text-xs" placeholder="Col"></td>
-          <td><input type="text" class="d-clarity w-full text-center text-xs" placeholder="Clar"></td>
           <td><input type="number" step="0.0001" class="d-avgwt w-full text-center font-mono" placeholder="0.0000" oninput="recalcTotals()" onblur="formatDecimal(this,4)"></td>
           <td><input type="number" class="d-qty w-full text-center" placeholder="0" oninput="recalcTotals()"></td>
           <td><input type="number" step="0.001" class="d-tot w-full text-center bg-slate-100 font-bold font-mono" readonly tabindex="-1"></td>
@@ -457,8 +459,6 @@
                <input type="number" step="0.01" class="d-hei dim-input" placeholder="H" onblur="formatDecimal(this,2)">
              </div>
           </td>
-          <td><select class="d-color w-full text-center text-xs">${getDropdownOptions(dropdownData.mainColors, "Col")}</select></td>
-          <td><select class="d-clarity w-full text-center text-xs">${getDropdownOptions(dropdownData.mainClarities, "Clar")}</select></td>
           <td><input type="number" step="0.0001" class="d-avgwt w-full text-center font-mono" placeholder="0.0000" oninput="recalcTotals()" onblur="formatDecimal(this,4)"></td>
           <td><input type="number" class="d-qty w-full text-center" placeholder="0" oninput="recalcTotals()"></td>
           <td><input type="number" step="0.001" class="d-tot w-full text-center bg-slate-100 font-bold font-mono" readonly tabindex="-1"></td>
@@ -599,8 +599,6 @@
         let pos = row.querySelector('.d-pos').value;
         let shape = row.querySelector('.d-shape').value || "";
         let avgwt = row.querySelector('.d-avgwt').value || "";
-        let color = row.querySelector('.d-color').value || "";
-        let clarity = row.querySelector('.d-clarity').value || "";
         let qty = row.querySelector('.d-qty').value || "";
         let wt = row.querySelector('.d-tot').value || "";
         let source = row.querySelector('.d-source').value || "";
@@ -610,8 +608,8 @@
         let d = row.querySelector('.d-hei').value || "";
         let mm = (l||w||d) ? `${l}x${w}x${d}` : "";
         
-        if (shape || avgwt || mm || color || clarity) {
-           let baseString = `${shape} ${mm ? '('+mm+'mm)' : ''} ${color} ${clarity}`.trim().replace(/\s+/g, ' ');
+        if (shape || avgwt || mm) {
+           let baseString = `${shape} ${mm ? '('+mm+'mm)' : ''}`.trim().replace(/\s+/g, ' ');
            let fullString = `${baseString} | Avg:${avgwt}ct | Qty:${qty} | ${wt}ct${source ? ' | Src:'+source : ''}`;
            allDetails.push(fullString);
            if (pos === 'Center') centerDetails.push(fullString);
@@ -634,8 +632,6 @@
           L: row.querySelector('.d-len').value,
           W: row.querySelector('.d-wid').value,
           H: row.querySelector('.d-hei').value,
-          Color: row.querySelector('.d-color').value,
-          Clarity: row.querySelector('.d-clarity').value,
           Qty: row.querySelector('.d-qty').value, 
           Tot: row.querySelector('.d-tot').value, 
           Set: row.querySelector('.d-set').value,
@@ -653,27 +649,41 @@
     function computeDerivedFields(data) {
       const derived = {};
 
-      // Combined metal strings, e.g. "18KT + PT" / "YG + WG". Only includes the
-      // second metal if it was actually filled in.
+      // Metal Type: preserve order exactly as entered, e.g. "18KT + PT" or
+      // "PT + 18KT" — order is meaningful and NOT normalized to match any
+      // fixed list, per confirmed business rule. Falls back to whichever
+      // single metal is filled in if only one is present.
       const mt1 = (data['Metal Type 1'] || '').trim();
       const mt2 = (data['Metal Type 2'] || '').trim();
+      derived['_METAL_TYPE_COMBINED'] = [mt1, mt2].filter(Boolean).join(' + ');
+
+      // Metal Color: first-letter-of-each-code concatenation, e.g.
+      // "RG" + "WG" -> "RW" (confirmed business rule). This is checked
+      // against the approved metalColors list before use — if the computed
+      // code isn't one of the approved values (e.g. an unusual pairing),
+      // fall back to Metal Col 1 alone rather than sending a value that
+      // would get rejected by the sheet's dropdown validation.
       const mc1 = (data['Metal Col 1'] || '').trim();
       const mc2 = (data['Metal Col 2'] || '').trim();
-      derived['_METAL_TYPE_COMBINED']  = [mt1, mt2].filter(Boolean).join(' + ');
-      derived['_METAL_COLOR_COMBINED'] = [mc1, mc2].filter(Boolean).join(' + ');
+      let combinedColor = '';
+      if (mc1 && mc2) {
+        const candidate = mc1.charAt(0).toUpperCase() + mc2.charAt(0).toUpperCase();
+        combinedColor = dropdownData.metalColors.includes(candidate) ? candidate : mc1;
+      } else {
+        combinedColor = mc1 || mc2;
+      }
+      derived['_METAL_COLOR_COMBINED'] = combinedColor;
 
       // Stone-derived summaries from the raw rows.
       const stones = Array.isArray(data._RAW_STONES) ? data._RAW_STONES : [];
       let totalQty = 0;
-      const types = [], sources = [], settings = [], shapeColClar = [];
+      const types = [], sources = [], settings = [];
       stones.forEach(s => {
         const q = parseFloat(s.Qty);
         if (!isNaN(q)) totalQty += q;
         if (s.Stone && !types.includes(s.Stone)) types.push(s.Stone);
         if (s.Source && !sources.includes(s.Source)) sources.push(s.Source);
         if (s.Set && !settings.includes(s.Set)) settings.push(s.Set);
-        const scc = [s.Shape, [s.Color, s.Clarity].filter(Boolean).join('/')].filter(Boolean).join(' ');
-        if (scc) shapeColClar.push(scc);
       });
 
       derived['_STONE_QTY']      = totalQty > 0 ? (totalQty % 1 === 0 ? totalQty.toFixed(0) : String(totalQty)) : '';
@@ -871,7 +881,7 @@
       const fmtWt3 = (v) => { const n = parseFloat(v); return isNaN(n) ? '-' : n.toFixed(3); };
       let stoneData = formData._RAW_STONES.filter(s => s.Stone || s.Shape || s.Qty).map(s => [
          s.Pos || '-', s.Stone || '-', s.Shape || '-',
-         (s.L || s.W || s.H) ? `${fmtDim(s.L)}x${fmtDim(s.W)}x${fmtDim(s.H)}` : '-', s.Color || '-', s.Clarity || '-',
+         (s.L || s.W || s.H) ? `${fmtDim(s.L)}x${fmtDim(s.W)}x${fmtDim(s.H)}` : '-',
          fmtWt4(s.AvgWt || s.Sieve), s.Qty || '-', fmtWt3(s.Tot), s.Set || '-', s.Source || '-'
       ]);
 
@@ -882,7 +892,7 @@
             styles: { cellPadding: 1.5 },
             headStyles: { fillColor: [59, 130, 246], textColor: 255, fontSize: 7, fontStyle: 'bold', halign: 'center' },
             bodyStyles: { fontSize: 7, halign: 'center', textColor: [71, 85, 105] },
-            head: [['Pos', 'Stone', 'Shape', 'L x W x H', 'Col', 'Clar', 'Avg Dia Wt', 'Qty', 'Total Wt', 'Setting', 'Source']],
+            head: [['Pos', 'Stone', 'Shape', 'L x W x H', 'Avg Dia Wt', 'Qty', 'Total Wt', 'Setting', 'Source']],
             body: stoneData
           });
       }
@@ -1108,8 +1118,6 @@
                     L: sizeNums[0] || '',
                     W: sizeNums[1] || sizeNums[0] || '',
                     H: sizeNums[2] || '',
-                    Color: '',
-                    Clarity: '',
                     Qty: g['Pcs'] || '',
                     Tot: '',
                     Set: '',
@@ -1168,8 +1176,6 @@
                 setIfNumeric('.d-len', s.L, 2);
                 setIfNumeric('.d-wid', s.W, 2);
                 setIfNumeric('.d-hei', s.H, 2);
-                if(s.Color) row.querySelector('.d-color').value = s.Color;
-                if(s.Clarity) row.querySelector('.d-clarity').value = s.Clarity;
                 if(s.Qty) row.querySelector('.d-qty').value = s.Qty;
                 setIfNumeric('.d-tot', s.Tot, 3);
                 if(s.Set) row.querySelector('.d-set').value = s.Set;
