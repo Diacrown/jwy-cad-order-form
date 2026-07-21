@@ -21,6 +21,7 @@ const APP_SHELL = [
   './vendor/jspdf.umd.min.js',
   './vendor/jspdf.plugin.autotable.min.js',
   './vendor/pdf.min.js',
+  './vendor/jszip.min.js',
   './icon-192.png',
   './icon-512.png'
 ];
@@ -45,15 +46,14 @@ self.addEventListener('activate', (event) => {
 
 // Cache-first strategy: serve from cache immediately (instant load, works
 // offline), and update the cache in the background from the network when
-// available. Never intercepts the Apps Script API calls — those need to hit
-// the live network every time to actually sync data, so this only handles
-// the static app-shell files listed above.
+// available. This only handles the static app-shell files listed above —
+// the form itself has no network calls (PDF/PNG/ZIP export is all local).
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   const isAppShellRequest = APP_SHELL.some((path) => url.pathname.endsWith(path.replace('./', '/')) || url.pathname.endsWith(path.replace('./', '')));
 
   if (event.request.method !== 'GET' || !isAppShellRequest) {
-    return; // let the browser handle it normally (e.g. the API submission POST)
+    return; // let the browser handle it normally
   }
 
   event.respondWith(
